@@ -21,6 +21,7 @@ import re
 from robot import config, logging
 from robot.sdk.AbstractPlugin import AbstractPlugin
 
+
 logger = logging.getLogger(__name__)
 
 WORDS = ["FENGSHANG"]

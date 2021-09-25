@@ -39,7 +39,7 @@ class Plugin(AbstractPlugin):
 
     def search_word(self, text):
         home_dir = os.path.expandvars('$HOME')
-        location = home_dir + '/.wukong/action.json'
+        location = home_dir + '/.izual/action.json'
         if os.path.exists(location):
             f = open(location).read()
 
@@ -49,7 +49,8 @@ class Plugin(AbstractPlugin):
                 for key in fjson.keys():
                     value = fjson[key]
 
-                    if isinstance(value,list):   # 向上兼容
+                    # UPWARD COMPATIBLE
+                    if isinstance(value,list):
                         for word in value:
                             if word in text:
                                 return key,word
@@ -61,7 +62,7 @@ class Plugin(AbstractPlugin):
 
             except Exception as e:
                 logger.error(e)
-                self.say("抱歉出了问题", cache=True)
+                self.say("插件出错", cache=True)
                 return
 
         else:
@@ -72,9 +73,9 @@ class Plugin(AbstractPlugin):
 
         profile = config.get()
 
-        #get config
+        #GET CONFIG
         if ( self.SLUG not in profile ) or ( 'host' not in profile[self.SLUG] ) or ( 'topic_s' not in profile[self.SLUG] ):
-            self.say("主人，配置有误", cache=True)
+            self.say("配置错误", cache=True)
             return
 
         host = profile[self.SLUG]['host']
@@ -82,15 +83,15 @@ class Plugin(AbstractPlugin):
         if ( 'port' in profile[self.SLUG] ):
             port = int(profile[self.SLUG]['port'])
         topic_s = profile[self.SLUG]['topic_s']
-        # text = text.split("，")[0]   #百度语音识别返回的数据中有个中文，
+        # text = text.split("，")[0]   # THERE IS A CHINESE IN THE DATA RETURNED BY BAIDU SPEECH RECOGNITION
         topic_p,payload = self.search_word(text)
 
         try:
-            self.say("已经接收到指令", cache=True)
+            self.say("已收到指令", cache=True)
             mqtt_contro(host,port,topic_s,topic_p,payload,self.con)
         except Exception as e:
             logger.error(e)
-            self.say("抱歉出了问题", cache=True)
+            self.say("插件出错", cache=True)
             return
 
     def isValid(self, text, parsed):

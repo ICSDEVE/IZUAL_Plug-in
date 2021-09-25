@@ -68,10 +68,10 @@ class Plugin(AbstractPlugin):
                     else:
                         return "%f,%f" % (res['result'][0]["location"]['lat'], res['result'][0]["location"]['lng'])
                 else:
-                    self.say(u"找不到{}的经纬度，对不起！".format(checkPlace))
+                    self.say(u"找不到{}的经纬度".format(checkPlace))
                     return
             else:
-                logger.error(u"位置接口:" + res['message'])
+                logger.error(u"位置接口：" + res['message'])
                 return
         else:
             logger.error(u"位置接口调用失败")

@@ -536,30 +536,30 @@ class Plugin(AbstractPlugin):
                     self.isContinueAsking = True
                     self.say('你一共有{}张歌单！'.format(len(self.player.multi_listChoices)) + playlists_info + '你想听哪一张呢，或者需要我重新报一次吗', onCompleted=lambda: self.handle_multilists(self.activeListen()))
 
-            ###################################播放我的红心歌单时，开启心动模式（将你自己的红心曲目与系统推荐的新歌交替进行播放）###########################################
+            ###################################WHEN PLAYING MY RED HEART PLAYLIST, TURN ON THE HEARTBEAT MODE (PLAY YOUR OWN RED HEART SONGS ALTERNATELY WITH NEW SONGS RECOMMENDED BY THE SYSTEM)###########################################
             elif u'心动模式' in text  and self.player.playlist:
                 if not self.isOpenLikelist:
-                    self.say('真抱歉，你得选择红心歌单才能开启心动模式~', cache=True, wait=True)
+                    self.say('你得选择红心歌单才能开启心动模式~', cache=True, wait=True)
                 else:
                     self.player.change_playmode_intelligence(self.player.playlist[self.player.idx]['song_id'])
                     if self.player.playlist:
                         self.say('已成功开启心动模式，目前有{}首歌曲！'.format(len(self.player.playlist)), wait=True)
                         self.player.play()
                     else:
-                        self.say('哎！开启心动模式失败，获取不到歌曲！不好意思。', cache=True, wait=True)
+                        self.say('心动模式开启失败，无法获取歌曲！', cache=True, wait=True)
 
-            ###################################询问某张歌单名字或者当前歌名####################################
+            ###################################ASK FOR THE NAME OF A PLAYLIST OR THE NAME OF THE CURRENT SONG####################################
             elif any(word in text for word in ['啥', '什么']) and self.player.playlist:
                 if u"歌单" in text and self.player.list_idx:
                         self.say('目前播放的歌单叫{}！'.format(self.player.multi_listChoices[self.player.list_idx]['playlist_name']), wait=True)
                 elif u"歌单" in text:
-                        self.say('你选择的都不是歌单，怎么会有歌单名呢，哼！', cache=True)
+                        self.say('你选择的都不是歌单，怎么会有歌单名呢', cache=True)
                 else:
                     #logger.info('这首歌叫{}, 是{}唱的！'.format(self.player.playlist[self.player.idx]['song_name']))
                     self.say('这首歌叫{}, 是{}唱的！'.format(self.player.playlist[self.player.idx]['song_name'], self.player.playlist[self.player.idx]['artist']), wait=True)
                 self.player.resume()
 
-            ###################################播放歌曲时，收藏当前播放的歌曲或歌单###########################################
+            ###################################WHEN PLAYING A SONG, BOOKMARK THE CURRENTLY PLAYING SONG OR PLAYLIST###########################################
             elif self.nlu.hasIntent(parsed, 'SAVE') and self.player.playlist:
                 if u"歌单" in text and self.player.list_idx:
                     if self.player.api.subscribe_playlist(self.player.multi_listChoices[self.player.list_idx]['playlist_id']):
@@ -567,7 +567,7 @@ class Plugin(AbstractPlugin):
                     else:
                         self.say('这歌单收藏失败，估计之前就收藏了吧', cache=True, wait=True)
                 elif u"歌单" in text:
-                        self.say('目前播放的不是歌单啦！怎么收藏呢~哼!', cache=True, wait=True)
+                        self.say('目前播放的不是歌单啦！怎么收藏呢?', cache=True, wait=True)
                 else:
                     if self.player.api.like_song(self.player.playlist[self.player.idx]['song_id']):
                         self.say('这首歌已收藏成功啦！', cache=True, wait=True)
@@ -575,19 +575,19 @@ class Plugin(AbstractPlugin):
                         self.say('这首歌收藏失败了，估计之前就收藏了吧', cache=True, wait=True)
                 self.player.resume()
 
-            ###########################################播放器的基本操作#####################################################
+            ###########################################BASIC OPERATION OF THE PLAYER#####################################################
             elif self.nlu.hasIntent(parsed, 'CHANGE_TO_NEXT'):
                 if self.player.playlist:
                     self.say('下一首歌', cache=True, wait=True)
                     self.player.next()
                 else:
-                    self.say('你都还没有播放歌曲，哼~', cache=True)
+                    self.say('你还没有播放歌曲~', cache=True)
             elif self.nlu.hasIntent(parsed, 'CHANGE_TO_LAST'):
                 if self.player.playlist:
                     self.say('上一首歌', cache=True, wait=True)
                     self.player.prev()
                 else:
-                    self.say('你都还没有播放歌曲，哼~', cache=True)
+                    self.say('你还没有播放歌曲~', cache=True)
             elif self.nlu.hasIntent(parsed, 'CHANGE_VOL'):
                 slots = self.nlu.getSlots(parsed, 'CHANGE_VOL')
                 for slot in slots:
@@ -616,16 +616,17 @@ class Plugin(AbstractPlugin):
             elif self.nlu.hasIntent(parsed, 'CLOSE_MUSIC') or u'退出' in text:
                 self.player.stop()
                 self.player = None
-                self.clearImmersive()  # 去掉沉浸式
+                # TAKE OUT IMMERSIVE
+                self.clearImmersive()
                 self.say('退出网易云', cache=True)
 
-            ###################################不清楚用户的意图时就再次询问，例如用户说: 打开网易云(未抓取关键信息)####################################
+            ###################################ASK AGAIN WHEN YOU DON’T KNOW THE USER’S INTENTION####################################
             else:
                 self.say('你想播放什么？我能帮你要到推荐歌曲，推荐歌单或是你的歌单，甚至搜索某歌手或歌名？', cache=True)
 
         except Exception as e:
             logger.error(e)
-            self.say('哎呀！处理语句出错~赶紧检查一下吧！', cache=True)
+            self.say('处理语句时出错', cache=True)
 
     def pause(self):
         if self.player:

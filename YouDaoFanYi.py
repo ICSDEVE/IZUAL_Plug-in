@@ -15,14 +15,15 @@
 
 ## ==> IMPORT MODULE
 # ///////////////////////////////////////////////////////////////
-
-import json
-import re
-import requests
 import hashlib
+import json
 import random
+import re
+
+import requests
 from robot import config, logging
 from robot.sdk.AbstractPlugin import AbstractPlugin
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,32 +1,40 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Author: omi
-# @Date:   2014-08-24 21:51:57
-"""
-网易云音乐 Api
-"""
-from builtins import int
-from builtins import open
-from builtins import pow
 
-import os
-import json
-import time
-import hashlib
+# ///////////////////////////////////////////////////////////////
+#
+# @Author  : Jehovah
+# @File    : NetEaseApi.py
+# @Time    : 09/26/21 05:56:29
+# @Version : v1.4
+#
+# We will use this project for commercial purposes in the future.
+# If you need to change or imitate (including GUI), please let us know about it.
+#
+# ///////////////////////////////////////////////////////////////
+
+## ==> IMPORT MODULE
+# ///////////////////////////////////////////////////////////////
 import base64
 import binascii
+import hashlib
+import json
+import os
 import platform
-
+import time
+from builtins import int, open, pow
 from collections import OrderedDict
-from Crypto.Cipher import AES
-from http.cookiejar import LWPCookieJar
-from http.cookiejar import Cookie
+from http.cookiejar import Cookie, LWPCookieJar
+
 import requests
 import requests_cache
+from Crypto.Cipher import AES
 from robot import logging
+
+
 log = logging.getLogger(__name__)
 
-# 歌曲榜单地址
+# SONG LIST ADDRESS
 TOP_LIST_ALL = {
     0: ["云音乐新歌榜", "3779629"],
     1: ["云音乐热歌榜", "3778678"],
@@ -178,7 +186,7 @@ class Parse(object):
 
     @classmethod
     def song_album(cls, song):
-        # 对新老接口进行处理
+        # PROCESS NEW AND OLD INTERFACES
         if "al" in song and type(song['al']) == list:
             album_name = ", ".join([a["name"] for a in song["al"] if a["name"] is not None])
             album_id = ", ".join(str(a["id"]) for a in song["al"] if a["id"] is not None)
@@ -220,11 +228,11 @@ class Parse(object):
     @classmethod
     def song_artist(cls, song):
         artist = ""
-        # 对新老接口进行处理
+        # PROCESS NEW AND OLD INTERFACES
         if "ar" in song:
             artist = ", ".join([a["name"] for a in song["ar"] if a["name"] is not None])
-            # 某些云盘的音乐会出现 'ar' 的 'name' 为 None 的情况
-            # 不过会多个 ’pc' 的字段
+            # SOME CLOUD DISK MUSIC SHOWS THAT THE 'NAME' OF 'AR' IS NONE
+            # BUT THERE WILL BE MULTIPLE ‘PC’ FIELDS
             # {'name': '简单爱', 'id': 31393663, 'pst': 0, 't': 1, 'ar': [{'id': 0, 'name': None, 'tns': [], 'alias': []}],
             #  'alia': [], 'pop': 0.0, 'st': 0, 'rt': None, 'fee': 0, 'v': 5, 'crbt': None, 'cf': None,
             #  'al': {'id': 0, 'name': None, 'picUrl': None, 'tns': [], 'pic': 0}, 'dt': 273000, 'h': None, 'm': None,
@@ -312,7 +320,7 @@ class Parse(object):
             for pl in playlists
         ]
 
-# 歌曲加密算法, 基于https://github.com/yanunon/NeteaseCloudMusic脚本实现
+# SONG ENCRYPTION ALGORITHM, BASED ON https://github.com/yanunon/NeteaseCloudMusic SCRIPT IMPLEMENTATION
 def encrypted_id(id):
     magic = bytearray('3go8&$8*3*3h0k(2)2', 'u8')
     song_id = bytearray(id, 'u8')
@@ -326,9 +334,10 @@ def encrypted_id(id):
     result = result.replace(b'+', b'-')
     return result.decode('utf-8')
 
-# 登录加密算法, 基于https://github.com/stkevintan/nw_musicbox脚本实现
+# LOGIN ENCRYPTION ALGORITHM, BASED ON https://github.com/stkevintan/nw_musicbox SCRIPT IMPLEMENTATION
 def encrypted_request(text):
-    text = json.dumps(text).encode('utf-8') ##因为pycryto很久没更新，所以需要编码成utf-8才行
+    #BECAUSE PYCRYTO HAS NOT BEEN UPDATED FOR A LONG TIME, IT NEEDS TO BE ENCODED AS UTF-8
+    text = json.dumps(text).encode('utf-8')
     log.debug(text)
     secKey = createSecretKey(16)
     encText = aesEncrypt(aesEncrypt(text, NONCE), secKey)
@@ -401,7 +410,7 @@ class NetEase(object):
             )
         return resp
 
-    # 生成Cookie对象
+    # GENERATE COOKIE OBJECT
     def make_cookie(self, name, value):
         return Cookie(
             version=0,
@@ -469,65 +478,65 @@ class NetEase(object):
         self.session.cookies.save()
         return data
 
-    # 每日签到
+    # DAILY CHECK-IN
     def daily_task(self, is_mobile=True):
         path = "/weapi/point/dailyTask"
         params = dict(type=0 if is_mobile else 1)
         return self.request("POST", path, params)
 
-    # 用户歌单
+    # USER PLAYLIST
     def user_playlist(self, uid, offset=0, limit=50):
         path = "/weapi/user/playlist"
         params = dict(uid=uid, offset=offset, limit=limit, csrf_token="")
         return self.request("POST", path, params).get("playlist", [])
 
-    # 个性化的用户新歌单
+    # PERSONALIZED NEW PLAYLIST FOR USERS
     def personalized_playlist(self, total=True, offset=0, limit=30):
         path = "/weapi/personalized/playlist"  # NOQA
         params = dict(total=total, offset=offset, limit=limit, n=1000, csrf_token="")
         return self.request("POST", path, params).get("result", [])
 
-    # 个性化的用户新歌
+    # PERSONALIZED USER NEW SONG
     def personalized_newsong(self, total=True, offset=0, limit=25):
         path = "/weapi/personalized/newsong"  # NOQA
         params = dict(type='recommend', total=total, offset=offset, limit=limit, csrf_token="")
         return self.request("POST", path, params).get("result", [])
 
-    # 每日推荐歌单
+    # DAILY RECOMMENDED PLAYLIST
     def recommend_resource(self):
         path = "/weapi/v1/discovery/recommend/resource"
         return self.request("POST", path).get("recommend", [])
 
-    # 每日推荐歌曲
+    # RECOMMENDED SONGS OF THE DAY
     def recommend_songs(self, total=True, offset=0, limit=20):
         path = "/weapi/v1/discovery/recommend/songs"  # NOQA
         params = dict(total=total, offset=offset, limit=limit, csrf_token="")
         return self.request("POST", path, params).get("recommend", [])
 
-    # 获得相似歌单
+    # GET SIMILAR PLAYLISTS
     def similar_playlist(self, songid, total=True,offset=0, limit=50):
         path = "/weapi/discovery/simiPlaylist"
         params = dict(songid=songid, total=total, offset=offset, limit=limit, csrf_token="")
         return self.request("POST", path, params)
 
-    # 获得相似歌曲
+    # GET SIMILAR SONGS
     def similar_song(self, songid, total=True,offset=0, limit=50):
         path = "/weapi/v1/discovery/simiSong"
         params = dict(songid=songid, total=total, offset=offset, limit=limit, csrf_token="")
         return self.request("POST", path, params)
 
-    # 私人FM
+    # PRIVATE FM
     def personal_fm(self):
         path = "/weapi/v1/radio/get"
         return self.request("POST", path).get("data", [])
 
-    # 用户喜欢（红心）的列表
+    # USER LIKES (RED HEARTS) LIST
     def like_playlist(self, uid):
         path = "/weapi/song/like/get"
         params = dict(uid=uid, csrf_token="")
         return self.request("POST", path, params).get("ids", [])
 
-    # 开启心动播放
+    # TURN ON HEARTBEAT PLAYBACK
     def playmode_intelligence(self, sid, pid, type='fromPlayOne', count=1):
         path = "/weapi/playmode/intelligence/list"
         params = dict(songId=sid, type='fromPlayOne', playlistId=pid, startMusicId=sid, count=count, csrf_token="")
@@ -541,31 +550,31 @@ class NetEase(object):
         )
         return self.request("POST", path, params)["code"] == 200
 
-   # 收藏歌单
+   # FAVORITE PLAYLIST
     def subscribe_playlist(self, playlist_id, subscribe=True):
         path = 'weapi/playlist/subscribe'
         params = dict(id=playlist_id, t="true" if subscribe else "false")
         return self.request("POST", path, params)["code"] == 200
 
-    # FM trash
+    # FM TRASH
     def fm_trash(self, songid, time=25, alg="RT"):
         path = "/weapi/radio/trash/add"
         params = dict(songId=songid, alg=alg, time=time)
         return self.request("POST", path, params)["code"] == 200
 
-    # 搜索单曲(1)，歌手(100)，专辑(10)，歌单(1000)，用户(1002) *(type)*
+    # SEARCH FOR SINGLES (1), SINGERS (100), ALBUMS (10), PLAYLISTS (1000), USERS (1002) *(type)*
     def search(self, keywords, stype=1, offset=0, total="true", limit=50):
         path = "/weapi/search/get"
         params = dict(s=keywords, type=stype, offset=offset, total=total, limit=limit)
         return self.request("POST", path, params).get("result", {})
 
-    # 新碟上架
+    # NEW DISCS ON SHELVES
     def new_albums(self, offset=0, limit=50):
         path = "/weapi/album/new"
         params = dict(area="ALL", offset=offset, total=True, limit=limit)
         return self.request("POST", path, params).get("albums", [])
 
-    # 歌单（网友精选碟） 选风格！！！  hot||new http://music.163.com/#/discover/playlist/
+    # PLAYLIST (SELECTED BY NETIZENS) CHOOSE STYLE!  hot||new http://music.163.com/#/discover/playlist/
     def top_playlists(self, category="全部", order="hot", offset=0, limit=50):
         path = "/weapi/playlist/list"
         params = dict(
@@ -577,11 +586,11 @@ class NetEase(object):
         path = "/weapi/playlist/catalogue"
         return self.request("POST", path)
 
-    # 歌单详情
+    # PLAYLIST DETAILS
     def playlist_detail(self, playlist_id):
         path = "/weapi/v3/playlist/detail"
         params = dict(id=playlist_id, total="true", limit=1000, n=1000, offest=0)
-        # cookie添加os字段
+        # COOKIE ADD OS FIELD
         custom_cookies = dict(os=platform.system())
         return (
             self.request("POST", path, params, {"code": -1}, custom_cookies)
@@ -589,18 +598,18 @@ class NetEase(object):
             .get("tracks", [])
         )
 
-    # 热门歌手 http://music.163.com/#/discover/artist/
+    # POPULAR SINGERS http://music.163.com/#/discover/artist/
     def top_artists(self, offset=0, limit=100):
         path = "/weapi/artist/top"
         params = dict(offset=offset, total=True, limit=limit)
         return self.request("POST", path, params).get("artists", [])
 
-    # 热门单曲 http://music.163.com/discover/toplist?id=
+    # POPULAR SINGLES http://music.163.com/discover/toplist?id=
     def top_songlist(self, idx=0, offset=0, limit=100):
         playlist_id = TOP_LIST_ALL[idx][1]
         return self.playlist_detail(playlist_id)
 
-    # 歌手单曲
+    # SINGER SINGLE
     def artists(self, artist_id):
         path = "/weapi/v1/artist/{}".format(artist_id)
         return self.request("POST", path).get("hotSongs", [])
@@ -610,18 +619,18 @@ class NetEase(object):
         params = dict(offset=offset, total=True, limit=limit)
         return self.request("POST", path, params).get("hotAlbums", [])
 
-    # 用户数字专辑
+    # USER DIGITAL ALBUM
     def purchased_albums(self, offset=0, limit=50):
         path = "/api/digitalAlbum/purchased"
         params = dict(offset=offset, total=True, limit=limit)
         return self.request("POST", path, params).get("paidAlbums", [])
 
-    # 最新专辑
+    # LATEST ALBUM
     def latest_albums(self):
         path = "/api/discovery/newAlbum"
         return self.request("POST", path).get('albums', [])
 
-    # album id --> song id set
+    # ALBUM ID --> SONG ID SET
     def album(self, album_id):
         path = "/weapi/v1/album/{}".format(album_id)
         return self.request("POST", path).get("songs", [])
@@ -631,7 +640,7 @@ class NetEase(object):
         params = dict(rid=music_id, offset=offset, total=total, limit=limit)
         return self.request("POST", path, params)
 
-    # song ids --> song urls ( details )
+    # SONG IDS --> SONG URLS ( DETAILS )
     def songs_detail(self, ids):
         path = "/weapi/v3/song/detail"
         params = dict(c=json.dumps([{"id": _id} for _id in ids]), ids=json.dumps(ids))
@@ -644,7 +653,7 @@ class NetEase(object):
         params = dict(ids=ids, br=rate_map[0])
         return self.request("POST", path, params).get("data", [])
 
-    # lyric http://music.163.com/api/song/lyric?os=osx&id= &lv=-1&kv=-1&tv=-1
+    # LYRIC http://music.163.com/api/song/lyric?os=osx&id= &lv=-1&kv=-1&tv=-1
     def song_lyric(self, music_id):
         path = "/weapi/song/lyric"
         params = dict(os="osx", id=music_id, lv=-1, kv=-1, tv=-1)
@@ -663,7 +672,7 @@ class NetEase(object):
         else:
             return lyric.split("\n")
 
-    # 今日最热（0）, 本周最热（10），历史最热（20），最新节目（30）
+    # HOTTEST TODAY (0), HOTTEST THIS WEEK (10), HOTTEST IN HISTORY (20), LATEST SHOW (30)
     def djchannels(self, offset=0, limit=50):
         path = "/weapi/djradio/hot/v1"
         params = dict(limit=limit, offset=offset)
@@ -683,9 +692,9 @@ class NetEase(object):
         if dig_type == "songs" or dig_type == "fmsongs":
             urls = self.songs_url([s["id"] for s in data])
             timestamp = time.time()
-            # api 返回的 urls 的 id 顺序和 data 的 id 顺序不一致
-            # 为了获取到对应 id 的 url，对返回的 urls 做一个 id2index 的缓存
-            # 同时保证 data 的 id 顺序不变
+            # THE ID ORDER OF URLS RETURNED BY API IS INCONSISTENT WITH THE ID ORDER OF DATA
+            # IN ORDER TO GET THE URL CORRESPONDING TO THE ID, MAKE A CACHE OF ID2INDEX FOR THE RETURNED URLS
+            # AT THE SAME TIME, ENSURE THAT THE ID ORDER OF DATA REMAINS UNCHANGED
             url_id_index = {}
             for index, url in enumerate(urls):
                 url_id_index[url["id"]] = index

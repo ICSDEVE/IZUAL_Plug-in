@@ -1,7 +1,25 @@
-import requests
-from urllib import parse
-import re
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# ///////////////////////////////////////////////////////////////
+#
+# @Author  : Jehovah
+# @File    : weibo.py
+# @Time    : 09/26/21 05:53:07
+# @Version : v1.0
+#
+# We will use this project for commercial purposes in the future.
+# If you need to change or imitate (including GUI), please let us know about it.
+#
+# ///////////////////////////////////////////////////////////////
+
+## ==> IMPORT MODULE
+# ///////////////////////////////////////////////////////////////
 import json
+import re
+from urllib import parse
+
+import requests
 
 
 class WeiBo(object):
