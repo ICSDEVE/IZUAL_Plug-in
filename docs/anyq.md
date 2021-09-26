@@ -1,6 +1,6 @@
 # AnyQ #
 
-[AnyQ](https://github.com/baidu/AnyQ) 是百度开源的面向FAQ集合的问答系统框架。wukong-robot 支持使用 AnyQ 作为问答机器人，并支持在没命中的情况下再使用其他机器人进行兜底（可选）。
+[AnyQ](https://github.com/baidu/AnyQ) 是百度开源的面向FAQ集合的问答系统框架。IZUAL 支持使用 AnyQ 作为问答机器人，并支持在没命中的情况下再使用其他机器人进行兜底（可选）。
 
 ## 安装 AnyQ ##
 
@@ -40,7 +40,7 @@ anyq:
 
 ## QA 集配置（GUI 方式） ##
 
-wukong-robot 的后台管理端提供了 QA 集的编辑界面：
+IZUAL 的后台管理端提供了 QA 集的编辑界面：
 
 ![](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/qa.png)
 每个 QA 对使用`问题	答案`的形式（注意中间是使用 `TAB` 键敲出的制表符）。
@@ -74,14 +74,14 @@ wukong-robot 的后台管理端提供了 QA 集的编辑界面：
 
 ## QA 集配置（非 GUI 方式） ##
 
-如果你的要追加的词库非常大，此时在浏览器里操作会变得非常卡，此外，上传过程中还会阻塞主线程，影响 wukong-robot 的正常使用。这时候可以考虑用另一种方式来配置和提交 QA 集。
+如果你的要追加的词库非常大，此时在浏览器里操作会变得非常卡，此外，上传过程中还会阻塞主线程，影响 IZUAL 的正常使用。这时候可以考虑用另一种方式来配置和提交 QA 集。
 
-首先，直接用一个比较高效的编辑器（例如 VIM、BBEdit、VS Code）来编辑 `~/.wukong/qa.csv` ，追加你的词库。
+首先，直接用一个比较高效的编辑器（例如 VIM、BBEdit、VS Code）来编辑 `~/.izual/qa.csv` ，追加你的词库。
 
-之后，打开一个新的终端，在 wukong-robot 的根目录下执行：
+之后，打开一个新的终端，在 IZUAL 的根目录下执行：
 
 ``` bash
-python3 wukong.py upload 10
+python3 main.py upload 10
 ```
 
 即会开启一个 QA 集的上传进程。其中 `10` 表示并行上传的线程数，你可以根据机器的性能酌情调整。
@@ -101,7 +101,7 @@ line 449848 error
 
 ## 贡献 QA 集 ##
 
-如果你添加了一些不错的 QA 集，欢迎提交 Pull Request ，帮助 wukong-robot 变得更加智能。
+如果你添加了一些不错的 QA 集，欢迎提交 Pull Request ，帮助 IZUAL 变得更加智能。
 
 但在提交 PR 前请注意 QA 集里的内容：
 
@@ -115,26 +115,26 @@ line 449848 error
 
 ### QA 集贡献流程 ###
 
-接下来，访问 [wukong-robot 的 Github 主页](https://github.com/wzpan/wukong-robot) ，点击右上角的 【fork】 按钮，将仓库 fork 到自己的账户。如果之前已经 fork 过，这一步可以跳过。
+接下来，访问 [IZUAL 的 Github 主页](https://github.com/wzpan/wukong-robot) ，点击右上角的 【fork】 按钮，将仓库 fork 到自己的账户。如果之前已经 fork 过，这一步可以跳过。
 
-fork 完仓库后，在您的账户下也会有一个 wukong-contrib 项目，点击绿色的 【Clone or download】 按钮，记下新的仓库的地址。
+fork 完仓库后，在您的账户下也会有一个 IZUAL_Plug-in 项目，点击绿色的 【Clone or download】 按钮，记下新的仓库的地址。
 
-之后在你装有 wukong-robot 的设备中执行如下命令，添加新的仓库地址：
+之后在你装有 IZUAL 的设备中执行如下命令，添加新的仓库地址：
 
 ``` bash
-cd wukong-robot的目录
+cd IZUAL 的目录
 git remote add mine 新的仓库地址
 ```
 
-将你的 QA 集拷贝回 wukong-robot 仓库里并提交：
+将你的 QA 集拷贝回 IZUAL 仓库里并提交：
 
 ``` bash
-cp ~/.wukong/qa.csv static/qa.csv
+cp ~/.izual/qa.csv static/qa.csv
 git add static/qa.csv
 git commit -m "feat(QA): 新增QA数据集"
 git push -u mine master
 ```
 
-完成后访问您的 wukong-robot 仓库主页，可以看到一个创建 pull request 的提示。点击 【compare and pull request】 按钮，进入 pull request 创建页面，申请将您的改动合并到 wukong-robot 项目中。在里头简单填写下新增的内容即可。
+完成后访问您的 IZUAL 仓库主页，可以看到一个创建 pull request 的提示。点击 【compare and pull request】 按钮，进入 pull request 创建页面，申请将您的改动合并到 IZUAL 项目中。在里头简单填写下新增的内容即可。
 
 一旦审核通过，你贡献的 QA 集就发布成功了。

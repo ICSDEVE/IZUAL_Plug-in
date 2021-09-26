@@ -108,7 +108,7 @@ roadcondition:
 - 用户：百度音乐
 - 悟空：开始播放90后频道
 
-音乐播放过程中唤醒 wukong-robot ，会停止播放。如果说出“停止播放/退出播放/结束播放”，则插件退出，否则会继续从头播放。
+音乐播放过程中唤醒 IZUAL ，会停止播放。如果说出“停止播放/退出播放/结束播放”，则插件退出，否则会继续从头播放。
 
 ### 配置
 
@@ -264,7 +264,7 @@ wol:
 
 - 用户：翻译你好（你好的翻译）
 - 悟空：你好的翻译是 hello
-- 用户：翻译hello(hello的翻译） 
+- 用户：翻译hello(hello的翻译）
 - 悟空：hello的翻译是 你好
 
 ### 配置
@@ -311,7 +311,7 @@ youdao:
 
 ![用户资料页入口](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-1.png)
 
-然后将页面拉至最底下找到“长期访问令牌”点击创建令牌，随意取一个名字如： wukong ，点击确认。
+然后将页面拉至最底下找到“长期访问令牌”点击创建令牌，随意取一个名字如： IZUAL ，点击确认。
 
 ![创建长期访问令牌](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-2.png)
 
@@ -319,7 +319,7 @@ youdao:
 
 ##### 开启高级模式
 
-这一步是为了开启实体的[自定义功能](https://www.home-assistant.io/docs/configuration/customizing-devices/)，方便为你接入的每一个实体定制 wukong-robot 的 Hass 插件的触发命令。
+这一步是为了开启实体的[自定义功能](https://www.home-assistant.io/docs/configuration/customizing-devices/)，方便为你接入的每一个实体定制 IZUAL 的 Hass 插件的触发命令。
 
 在用户资料页里，滚到上面一点的位置，能找到一个高级模式（Advanced Mode），点击开启。
 
@@ -336,19 +336,19 @@ homeassistant:
 
 ##### 定制实体触发命令
 
-完成上面 HomeAssistant 的两步操作后，我们还需要解决一个问题：如何让 wukong-robot 理解用户的指令并转成对 HomeAssistant 的控制指令？在这一步中，我们在 customize.yaml 配置文件中，给希望能让 wukong-robot 控制的实体加点 “说明” ，将这些 HomeAssistant 的设备暴露给 wukong-robot 。
+完成上面 HomeAssistant 的两步操作后，我们还需要解决一个问题：如何让 IZUAL 理解用户的指令并转成对 HomeAssistant 的控制指令？在这一步中，我们在 customize.yaml 配置文件中，给希望能让 IZUAL 控制的实体加点 “说明” ，将这些 HomeAssistant 的设备暴露给 IZUAL 。
 
 下面我举几个实际例子。我家有：
 
-- 三个电灯泡（提供了 `light` 类型实体）。我希望通过类似 “打开灯”、“把灯关了” 的语音指令，让 wukong-robot 能给 HomeAssistant 下发开关这三个实体的控制指令：
+- 三个电灯泡（提供了 `light` 类型实体）。我希望通过类似 “打开灯”、“把灯关了” 的语音指令，让 IZUAL 能给 HomeAssistant 下发开关这三个实体的控制指令：
 
   ![`light` 实体](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-4.png)
-  
-- 一个净水器（提供了 `sensor` 类型实体）。我希望通过类似 “当前水质” 的语音指令，让 wukong-robot 帮我查询净水器的水质状态：
+
+- 一个净水器（提供了 `sensor` 类型实体）。我希望通过类似 “当前水质” 的语音指令，让 IZUAL 帮我查询净水器的水质状态：
 
   ![`sensor` 类型实体](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-5.png)
-  
-- 一个电风扇（我为其编写了 `script.zhimi_turn_on` 脚本和 `script.zhimi_turn_off` 脚本两个 `script` 类型服务）。我希望通过类似 “打开风扇”、“关了风扇” 的语音指令，让 wukong-robot 能给 HomeAssistant 下发执行这两个脚本的控制指令：
+
+- 一个电风扇（我为其编写了 `script.zhimi_turn_on` 脚本和 `script.zhimi_turn_off` 脚本两个 `script` 类型服务）。我希望通过类似 “打开风扇”、“关了风扇” 的语音指令，让 IZUAL 能给 HomeAssistant 下发执行这两个脚本的控制指令：
 
   ![`script` 类型服务](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-6.png)
 
@@ -356,53 +356,53 @@ homeassistant:
 
 ``` yaml
 light.zhi_rui_deng_pao_1:
-  wukong:
+  izual:
     ".*开.*灯": turn_on
     ".*灯.*开": turn_on
     ".*关.*灯": turn_off
     ".*灯.*关": turn_off
 light.zhi_rui_deng_pao_2:
-  wukong:
+  izual:
     ".*开.*灯": turn_on
     ".*灯.*开": turn_on
     ".*关.*灯": turn_off
     ".*灯.*关": turn_off
 light.zhi_rui_deng_pao_3:
-  wukong:
+  izual:
     ".*开.*灯": turn_on
     ".*灯.*开": turn_on
     ".*关.*灯": turn_off
     ".*灯.*关": turn_off
 ```
 
-其中，每个实体都有一个 `wukong` 的配置，且此时值为字典形式，表示需使用该值的信息设置状态。其中，键为语音指令的正则表达式，值为相应控制指令。例如，当用户的指令与 `.*开.*灯` （比如 `打开电灯`，`开灯`）的正则表达式匹配时，即执行对应的控制指令 `turn_on` 。
+其中，每个实体都有一个 `izual` 的配置，且此时值为字典形式，表示需使用该值的信息设置状态。其中，键为语音指令的正则表达式，值为相应控制指令。例如，当用户的指令与 `.*开.*灯` （比如 `打开电灯`，`开灯`）的正则表达式匹配时，即执行对应的控制指令 `turn_on` 。
 
 对于 `sensor` 实体，我们希望读取诸如水质、温度之类的状态值，不需要设置状态，因此可以在 customize.yaml 中追加配置如下：
 
 ``` yaml
 sensor.filtered_water:
-  wukong:
+  izual:
     - ".*水质.*"
 ```
 
-此时 `wukong` 的配置值变成了一个数组 `[".*水质.*"]` ，表示只需读取状态值无需设置值。当用户的指令与 `.*水质.*` （比如 `当前水质`，`水质怎么样`）的正则表达式匹配时，即读取并播报净水器的水质状态值。
+此时 `izual` 的配置值变成了一个数组 `[".*水质.*"]` ，表示只需读取状态值无需设置值。当用户的指令与 `.*水质.*` （比如 `当前水质`，`水质怎么样`）的正则表达式匹配时，即读取并播报净水器的水质状态值。
 
 对于 `script` 类型服务，我们需要直接执行它，因此可以在 customize.yaml 中追加配置如下：
 
 ``` yaml
 script.zhimi_turn_on:
-  wukong:
+  izual:
     - ".*开.*风扇"
 script.zhimi_turn_off:
-  wukong:
+  izual:
     - ".*关.*风扇"
 ```
 
-和 `sensor` 实体类似，脚本等服务无需传值，所以 `wukong` 的配置值是一个数组。当用户的指令与 `.*开.*风扇` （比如 `打开电风扇`，`开启风扇`）的正则表达式匹配时，及打开电风扇。
+和 `sensor` 实体类似，脚本等服务无需传值，所以 `izual` 的配置值是一个数组。当用户的指令与 `.*开.*风扇` （比如 `打开电风扇`，`开启风扇`）的正则表达式匹配时，及打开电风扇。
 
-#### 2. 配置 wukong-robot 的 Hass 插件
+#### 2. 配置 IZUAL 的 Hass 插件
 
-打开 wukong 的 config.yml 配置文件（或在 wukong-robot 的后台管理端配置页面），先添加：
+打开 izual 的 config.yml 配置文件（或在 IZUAL 的后台管理端配置页面），先添加：
 
 ``` yaml
 hass:
@@ -423,9 +423,9 @@ hass:
 
 用上面获取到的 token 替换 `XXXXXXXXXX` (保留 Bearer 和 `XXXXXXXXXX` 之间的空格)，将其整体填入双引号中。
 
-而 `patterns` 则是在上一步中 `customize.yaml` 里所有 `wukong` 包含的正则表达式。
+而 `patterns` 则是在上一步中 `customize.yaml` 里所有 `izual` 包含的正则表达式。
 
-当用户跟 wukong-robot 说完控制指令时，这个控制指令会先尝试与 Hass 插件的 `patterns` 里的每一个正则式进行匹配，如果匹配成功，则触发 Hass 插件，再由 Hass 插件尝试与 HomeAssistant 暴露的所有控制指令进行进一步匹配。如果匹配成功，则由 HomeAssistant 执行对应指令。
+当用户跟 IZUAL 说完控制指令时，这个控制指令会先尝试与 Hass 插件的 `patterns` 里的每一个正则式进行匹配，如果匹配成功，则触发 Hass 插件，再由 Hass 插件尝试与 HomeAssistant 暴露的所有控制指令进行进一步匹配。如果匹配成功，则由 HomeAssistant 执行对应指令。
 
 ![Hass 插件执行效果](https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/wukong-docs/hass-7.png)
 
@@ -495,7 +495,7 @@ mqttPub:
 下面是NodeMCU硬件端参考代码，使用Arduino IDE进行开发。
 
 ```C
-/* wukong-robot control the NodeMCU by MQTT
+/* IZUAL control the NodeMCU by MQTT
    Compile with Arduino IDE
    Author: IAMLIUBO
    Github: github.com/imliubo
@@ -528,17 +528,17 @@ void LED_Control_Callback(const String & payload) {
   //  Serial.println(p);
   if (strstr(p, "开灯")) {
     digitalWrite(RELAY_PIN, LOW);
-    client.publish("/wukong/mqtt", "主人，灯已打开！");// "wukong/mqtt" 是在config.yml中定义的 topic_s 字段，用来回复wukong_robot的自定义消息。
+    client.publish("/izual/mqtt", "主人，灯已打开！");// "izual/mqtt" 是在config.yml中定义的 topic_s 字段，用来回复izual_robot的自定义消息。
   }
   if (strstr(p, "关灯")) {
     digitalWrite(RELAY_PIN, HIGH);
-    client.publish("/wukong/mqtt", "主人，灯已关闭！");
+    client.publish("/izual/mqtt", "主人，灯已关闭！");
   }
 }
 
 void onConnectionEstablished()
 {
-  client.subscribe("开发板一", LED_Control_Callback);// "开发板一" 是在action.json文件中定义的，用来接收wukong-robot下发的命令。
+  client.subscribe("开发板一", LED_Control_Callback);// "开发板一" 是在action.json文件中定义的，用来接收IZUAL下发的命令。
 }
 
 void setup()
@@ -629,7 +629,7 @@ npm install -g miio
 
 ### 配置
 
-先确保你的智米电风扇已开机并和 wukong-robot 所在的机器处于同一个局域网下。然后执行以下命令获取风扇的 `host` 和  `token`:
+先确保你的智米电风扇已开机并和 IZUAL 所在的机器处于同一个局域网下。然后执行以下命令获取风扇的 `host` 和  `token`:
 
 ``` sh
 miio discover
@@ -665,7 +665,7 @@ SmartMiFan:
 ## NeteaseMusic ##
 
 
-* 根据Github上的[musicbox](https://github.com/darknessomi/musicbox)所提供的api文件进行抽离和修改，配合wukong项目达到语音交互型的NeteaseMusic插件。
+* 根据Github上的[musicbox](https://github.com/darknessomi/musicbox)所提供的api文件进行抽离和修改，配合izual项目达到语音交互型的NeteaseMusic插件。
 * 目前功能：
   1. **个性化推荐歌单**
   2. **每日推荐歌曲**
@@ -683,23 +683,23 @@ SmartMiFan:
 
 ### 配置
 
-1. 首先请将账号信息配置在用户目录~/.wukong/config.yml，在文件最尾处添加类似下方的方式配置。
+1. 首先请将账号信息配置在用户目录~/.izual/config.yml，在文件最尾处添加类似下方的方式配置。
 ``` yml
 # 网易云音乐插件
 NeteaseMusic:
     account: 'XXXXXXXX'  # 网易云音乐账号
-    #密码的 md5，可以用 python3 wukong.py md5 "密码" 获得
-    md5pass: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx' 
+    #密码的 md5，可以用 python3 main.py md5 "密码" 获得
+    md5pass: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
-2. 将~/.wukong/contrib主库更新一下以获取WangYiYun.py插件，还有调用pip3下载一些额外的依赖库requests_cache。
+2. 将~/.izual/contrib主库更新一下以获取WangYiYun.py插件，还有调用pip3下载一些额外的依赖库requests_cache。
 
 ``` sh
-cd $HOME/.wukong/contrib
+cd $HOME/.izual/contrib
 git pull
 cd ../
 pip3 install -r contrib/requirements.txt
-``` 
+```
 
 ### 关于首次登陆的那些事
 * 首次登陆会通过账号信息account和md5pass尝试获取两周有效期的Cookies并保存于本地~/.neteasemusic/cookies，同时会定期检查有效期。
@@ -742,7 +742,7 @@ pip3 install -r contrib/requirements.txt
 - 用户：对的|是的|确认
 - 悟空：找到了李荣浩的XX。（然后播放歌曲）
 
-or 
+or
 
 - 用户：我想“听”陈奕迅“的”红玫瑰
 - 悟空：你要听陈奕迅的红玫瑰，对吗？不对的话，请重新说一次！

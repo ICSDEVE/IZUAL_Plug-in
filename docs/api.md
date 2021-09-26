@@ -16,7 +16,7 @@ $ curl localhost:5000/gethistory?validate=f4bde2a342c7c75aa276f78b26cfbd8a
 
 ## 管理
 
-用于重启 wukong-robot 。
+用于重启 IZUAL
 
 - url：/operate
 - method: POST
@@ -42,7 +42,7 @@ $ curl -X POST localhost:5000/operate -d "type=restart&validate=f4bde2a342c7c75a
 
 ## 日志
 
-用于查看 wukong-robot 保存的日志。出于性能上的考虑，默认只返回最后 200 行的内容，相当于做了一次 `tail -n 200` 。
+用于查看 IZUAL 保存的日志。出于性能上的考虑，默认只返回最后 200 行的内容，相当于做了一次 `tail -n 200` 。
 
 - url：/getlog
 - method: GET
@@ -82,7 +82,7 @@ $ curl localhost:5000/getlog?validate=f4bde2a342c7c75aa276f78b26cfbd8a&lines=10
 | ---   | ------- | ----- |
 | validate | 是 | 参见 [鉴权](#鉴权) |
 | type  | 是 |  query 类型。 "text": 文本型 query ； "voice"：语音型 query |
-| query | 仅当 type 为 "text" 时需要 |  发起对话的内容的 urlencode 后的值。例如 ”现在几点？“ 的 urlencode 结果 | 
+| query | 仅当 type 为 "text" 时需要 |  发起对话的内容的 urlencode 后的值。例如 ”现在几点？“ 的 urlencode 结果 |
 | uuid  | 仅当 type 为 "text" 时需要 |  为这个文本 query 赋予的一个 uuid。例如可以使用随机字符+时间戳。|
 | voice | 仅当 type 为 "voice" 时需要  | 语音。需为 单通道，采样率为 16k 的 wav 格式语音的 base64 编码。 |
 
@@ -102,7 +102,7 @@ $ curl -X POST localhost:5000/chat -d "type=text&query=%E7%8E%B0%E5%9C%A8%E5%87%
 
 ### 对话历史
 
-用于查看 wukong-robot 启动到现在的所有会话记录。
+用于查看 IZUAL 启动到现在的所有会话记录。
 
 - url：/gethistory
 - method: GET
@@ -130,7 +130,7 @@ $ curl localhost:5000/gethistory?validate=f4bde2a342c7c75aa276f78b26cfbd8a
 
 ### 查看配置
 
-用于查看 wukong-robot 现有的配置。
+用于查看 IZUAL 现有的配置。
 
 - url：/getconfig
 - method: GET
@@ -158,7 +158,7 @@ $ curl localhost:5000/getconfig?validate=f4bde2a342c7c75aa276f78b26cfbd8a\&key=s
 
 ### 修改配置
 
-用于配置 wukong-robot 。
+用于配置 IZUAL
 
 - url：/config
 - method: POST
@@ -172,7 +172,7 @@ $ curl localhost:5000/getconfig?validate=f4bde2a342c7c75aa276f78b26cfbd8a\&key=s
 - 示例：
 
 ``` bash
-$ curl -X localhost:5000/config -d "config=robot_name_cn%3A+'%E5%AD%99%E6%82%9F%E7%A9%BA'%0Afirst_name%3A+'%E4%BC%9F%E6%B4%B2'%0Alast_name%3A+'%E6%BD%98'%0Atimezone%3A+HKT%0Alocation%3A+'%E6%B7%B1%E5%9C%B3'%0A%0A%23+%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%AB%AF%0Aserver%3A%0A++++enable%3A+true%0A++++host%3A+'0.0.0.0'++%23+ip+%E5%9C%B0%E5%9D%80%0A++++port%3A+'5000'+++++%23+%E7%AB%AF%E5%8F%A3%E5%8F%B7++++%0A++++username%3A+'wukong'..."
+$ curl -X localhost:5000/config -d "config=robot_name_cn%3A+'%E5%AD%99%E6%82%9F%E7%A9%BA'%0Afirst_name%3A+'%E4%BC%9F%E6%B4%B2'%0Alast_name%3A+'%E6%BD%98'%0Atimezone%3A+HKT%0Alocation%3A+'%E6%B7%B1%E5%9C%B3'%0A%0A%23+%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%AB%AF%0Aserver%3A%0A++++enable%3A+true%0A++++host%3A+'0.0.0.0'++%23+ip+%E5%9C%B0%E5%9D%80%0A++++port%3A+'5000'+++++%23+%E7%AB%AF%E5%8F%A3%E5%8F%B7++++%0A++++username%3A+'izual'..."
 ```
 
 - 返回：
